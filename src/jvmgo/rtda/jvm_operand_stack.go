@@ -39,13 +39,13 @@ func (c *OperandStack) PopFloat() float32 {
 }
 
 func (c *OperandStack) PushLong(val int64)  {
-	c.PushInt(int32(val))
 	c.PushInt(int32(val >> 32))
+	c.PushInt(int32(val))
 }
-func (c *OperandStack) PopLong() uint64 {
+func (c *OperandStack) PopLong() int64 {
 	lower := uint32(c.PopInt())
 	higher := uint32(c.PopInt())
-	return uint64(higher) << 32 | uint64(lower)
+	return int64(uint64(higher) << 32 | uint64(lower))
 }
 
 func (c *OperandStack) PushDouble(val float64) {
@@ -57,6 +57,7 @@ func (c *OperandStack) PopDouble() float64 {
 
 func (c *OperandStack) PushRef(ref *Object) {
 	c.slots[c.size].ref = ref;
+	c.size++
 }
 func (c *OperandStack) PopRef() *Object {
 	c.size--
